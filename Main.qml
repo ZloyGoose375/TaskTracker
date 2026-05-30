@@ -13,46 +13,43 @@ Window {
     Loader {
         id: blockLoader
         anchors.fill: parent
-    }
-    Connections {
-        target: blockLoader.item
 
-        function onBackRequested() {
-            blockLoader.source = ""
-            root.blockOpened = false
+        onLoaded: {
+            console.log("LOADED ITEM =", item)
+
+            if (!item)
+                return
+
+            item.backRequested.connect(function() {
+                console.log("BACK RECEIVED")
+
+                root.blockOpened = false
+                blockLoader.source = ""
+            })
         }
     }
-    ScrollView {
 
-        anchors.fill: parent
+    // Список кнопок (главный экран)
+    Column {
 
-        Column {
+        visible: !root.blockOpened
 
-            width: parent.width
+        Repeater {
+            model: notesBlocks
 
-            spacing: 20
+            delegate: BlockOfNotesOpenButton {
 
-            Repeater {
+                currentNotesBlock: modelData
 
-                model: notesBlocks
+                onOpenRequested: {
+                    root.blockOpened = true
 
-                delegate: BlockOfNotesOpenButton {
-
-                    currentNotesBlock: modelData
-
-                    visible: !root.blockOpened
-
-                    onOpenRequested: {
-
-                        root.blockOpened = true
-
-                        blockLoader.setSource(
-                            "BlockOfNotesWidget.qml",
-                            {
-                                notesBlock: currentNotesBlock
-                            }
-                        )
-                    }
+                    blockLoader.setSource(
+                        "BlockOfNotesWidget.qml",
+                        {
+                            notesBlock: currentNotesBlock
+                        }
+                    )
                 }
             }
         }

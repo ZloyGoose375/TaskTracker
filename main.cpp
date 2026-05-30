@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    QList<NotesBlock*> blocks;
+    QList<QObject*> blocks;
     NotesBlock* notesBlock = new NotesBlock("АААААААААААА");
     NotesBlock* notesBlock2 = new NotesBlock("NotesBlock2");
     NotesBlock* notesBlock3 = new NotesBlock("NotesBlock3");
@@ -55,7 +55,10 @@ int main(int argc, char *argv[])
     blocks.append(notesBlock2);
     blocks.append(notesBlock3);
 
-    engine.rootContext()->setContextProperty("notesBlock", notesBlock);
+    engine.rootContext()->setContextProperty(
+        "notesBlocks",
+        QVariant::fromValue(blocks)
+        );
     engine.load(QUrl::fromLocalFile("TaskTracker/Main.qml"));
 
     if (engine.rootObjects().isEmpty()) {

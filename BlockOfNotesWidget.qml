@@ -7,7 +7,7 @@ Rectangle {
     // =========================================
     // Внешний вид
     // =========================================
-
+    property var notesBlock
     color: "#f5f5f5"
 
     radius: 12
@@ -62,6 +62,7 @@ Rectangle {
                 }
 
                 onClicked: {
+                    console.log("BACK CLICKED")
                     backRequested()
                 }
             }
