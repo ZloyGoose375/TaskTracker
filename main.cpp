@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QList>
 #include "mapwidget.h"
 #include "place.h"
 #include "note.h"
@@ -17,6 +18,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    QList<NotesBlock> blocks = new QList<NotesBlock()>;
     NotesBlock* notesBlock = new NotesBlock("АААААААААААА");
     NotesBlock* notesBlock2 = new NotesBlock("NotesBlock2");
     NotesBlock* notesBlock3 = new NotesBlock("NotesBlock3");
@@ -38,11 +40,20 @@ int main(int argc, char *argv[])
         false
     );
     Note *testNote3 = new Note();
-
+    Note *testNote4 = new Note();
+    Note *testNote5 = new Note();
+    Note *testNote6 = new Note();
 
     notesBlock->addNote(testNote1);
-    notesBlock->addNote(testNote3);
+    notesBlock->addNote(testNote2);
+    notesBlock2->addNote(testNote3);
+    notesBlock2->addNote(testNote4);
+    notesBlock3->addNote(testNote5);
+    notesBlock3->addNote(testNote6);
 
+    blocks.append(notesBlock);
+    blocks.append(notesBlock2);
+    blocks.append(notesBlock3);
 
     engine.rootContext()->setContextProperty("notesBlock", notesBlock);
     engine.load(QUrl::fromLocalFile("TaskTracker/Main.qml"));
