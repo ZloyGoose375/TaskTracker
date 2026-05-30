@@ -6,6 +6,7 @@
 #include "place.h"
 #include "note.h"
 #include "notesblock.h"
+#include "notesmanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    QList<QObject*> blocks;
+    NotesManager manager;
     NotesBlock* notesBlock = new NotesBlock("АААААААААААА");
     NotesBlock* notesBlock2 = new NotesBlock("NotesBlock2");
     NotesBlock* notesBlock3 = new NotesBlock("NotesBlock3");
@@ -51,14 +52,12 @@ int main(int argc, char *argv[])
     notesBlock3->addNote(testNote5);
     notesBlock3->addNote(testNote6);
 
-    blocks.append(notesBlock);
-    blocks.append(notesBlock2);
-    blocks.append(notesBlock3);
+    manager.addBlockObject(notesBlock);
+    manager.addBlockObject(notesBlock2);
+    manager.addBlockObject(notesBlock3);
 
-    engine.rootContext()->setContextProperty(
-        "notesBlocks",
-        QVariant::fromValue(blocks)
-        );
+    engine.rootContext()->setContextProperty("notesManager", &manager);
+    engine.rootContext()->setContextProperty("notesBlocks", QVariant::fromValue(manager.blocks()));
     engine.load(QUrl::fromLocalFile("TaskTracker/Main.qml"));
 
     if (engine.rootObjects().isEmpty()) {

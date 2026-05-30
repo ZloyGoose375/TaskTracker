@@ -4,44 +4,64 @@ import QtQuick.Layouts
 import QtQuick.Window
 Window {
     id: root
-    property bool blockOpened: false
+
     width: 640
     height: 480
     visible: true
-    title: qsTr("мы в дерьме")
+    Component.onCompleted: {
+        console.log("BLOCKS =", notesManager.blocks)
+    }
+    property bool blockOpened: false
+
+    // ================================
+    // ЭКРАН БЛОКА (Loader)
+    // ================================
 
     Loader {
         id: blockLoader
         anchors.fill: parent
-
-        onLoaded: {
-            console.log("LOADED ITEM =", item)
-
-            if (!item)
-                return
-
-            item.backRequested.connect(function() {
-                console.log("BACK RECEIVED")
-
-                root.blockOpened = false
-                blockLoader.source = ""
-            })
-        }
     }
 
-    // Список кнопок (главный экран)
+    // ================================
+    // ГЛАВНЫЙ ЭКРАН (СПИСОК БЛОКОВ)
+    // ================================
+
     Column {
 
-        visible: !root.blockOpened
+        anchors.fill: parent
+        spacing: 10
+
+        // =========================
+        // КНОПКА ДОБАВЛЕНИЯ
+        // =========================
+
+        Button {
+            text: "+ Новый блок"
+
+            width: parent.width
+            height: 45
+
+            onClicked: {
+                notesManager.addBlock("Новый блок")
+            }
+        }
+
+        // =========================
+        // СПИСОК БЛОКОВ
+        // =========================
 
         Repeater {
-            model: notesBlocks
+
+            model: notesManager.blocks   // ВАЖНО!
 
             delegate: BlockOfNotesOpenButton {
+
+                width: parent.width
 
                 currentNotesBlock: modelData
 
                 onOpenRequested: {
+
                     root.blockOpened = true
 
                     blockLoader.setSource(
@@ -52,6 +72,20 @@ Window {
                     )
                 }
             }
+        }
+    }
+
+    // ================================
+    // ОБРАБОТКА BACK ИЗ БЛОКА
+    // ================================
+
+    Connections {
+        target: blockLoader.item
+
+        function onBackRequested() {
+
+            root.blockOpened = false
+            blockLoader.source = ""
         }
     }
 }
