@@ -139,6 +139,7 @@ void NotesBlock::addNote(Note* note)
 
     m_notes.append(note);
 
+    emit notesChanged();
     emit countChanged();
 }
 
@@ -161,6 +162,7 @@ void NotesBlock::addNote(const QString& title,
 
     m_notes.append(note);
 
+    emit notesChanged();
     emit countChanged();
 }
 
@@ -178,6 +180,7 @@ void NotesBlock::removeNote(int index)
 
     note->deleteLater();
 
+    emit notesChanged();
     emit countChanged();
 }
 

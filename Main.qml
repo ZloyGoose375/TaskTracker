@@ -23,40 +23,36 @@ Window {
         anchors.fill: parent
         clip: true
 
-        visible: blockLoader.status !== Loader.Ready
+        visible: !blockLoader.item
 
         contentWidth: width
-        contentHeight: columnRoot.childrenRect.height
+        contentHeight: columnRoot.implicitHeight
 
-        Item {
+        Column {
             id: columnRoot
             width: parent.width
+            spacing: 10
 
-            Column {
+            Button {
+                text: "+ Новый блок"
                 width: parent.width
-                spacing: 10
+                height: 45
 
-                Button {
-                    text: "+ Новый блок"
+                onClicked: notesManager.addBlock("Новый блок")
+            }
+
+            Repeater {
+                model: notesManager.blocks
+
+                delegate: BlockOfNotesOpenButton {
                     width: parent.width
-                    height: 45
+                    currentNotesBlock: modelData
 
-                    onClicked: notesManager.addBlock("Новый блок")
-                }
-
-                Repeater {
-                    model: notesManager.blocks
-
-                    delegate: BlockOfNotesOpenButton {
-                        width: parent.width
-                        currentNotesBlock: modelData
-
-                        onOpenRequested: {
-                            blockLoader.setSource(
-                                "BlockOfNotesWidget.qml",
-                                { notesBlock: currentNotesBlock }
-                            )
-                        }
+                    onOpenRequested: {
+                        blockLoader.setSource(
+                            "BlockOfNotesWidget.qml",
+                            { notesBlock: currentNotesBlock }
+                        )
                     }
                 }
             }
@@ -68,11 +64,9 @@ Window {
         target: blockLoader.item
 
         function onBackRequested() {
-            blockLoader.source = ""
-        }
-        function onBlockDeleted() {
-            console.log("BLOCK DELETED → CLOSE VIEW")
-            blockLoader.source = ""
+            console.log("BACK CLICKED")
+
+            blockLoader.source = ""   // только это
         }
     }
     Connections {

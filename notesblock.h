@@ -15,18 +15,10 @@
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQmlListProperty<Note> notes
-                   READ notes
-                       NOTIFY countChanged)
-
-    Q_PROPERTY(int count
-                   READ count
-                       NOTIFY countChanged)
-
-    Q_PROPERTY(QString blockName
-                   READ blockName
-                       WRITE setBlockName
-                           NOTIFY blockNameChanged)
+    Q_PROPERTY(QQmlListProperty<Note> notes READ notes NOTIFY countChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(QString blockName READ blockName WRITE setBlockName NOTIFY blockNameChanged)
+    Q_PROPERTY(int count READ count NOTIFY notesChanged)
 
 public:
 
@@ -86,6 +78,7 @@ signals:
     void countChanged();
 
     void blockNameChanged();
+    void notesChanged();
 
 private:
 
