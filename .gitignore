@@ -1,0 +1,27 @@
+# Build
+build*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Qt Creator
+*.pro.user
+*.user
+*.autosave
+
+# Visual Studio
+.vs/
+
+# VS Code
+.vscode/
+
+# Compiled files
+*.o
+*.obj
+*.exe
+*.dll
+*.pdb
+
+# Qt cache
+.qtc_clangd/ 
