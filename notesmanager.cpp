@@ -33,13 +33,25 @@ QList<QObject*> NotesManager::blocks() const
     return m_blocks;
 }
 
-void NotesManager::addBlock(const QString &name)
+void NotesManager::addBlockObject(QObject *block)
 {
-    auto *block = new NotesBlock(name, this);
+    if (!block)
+        return;
 
     m_blocks.append(block);
 
-    qDebug() << "BLOCK ADDED:" << name;
+    emit blocksChanged();
+}
+void NotesManager::removeBlock(QObject *block)
+{
+    if (!block)
+        return;
 
-    emit blocksChanged();   // 🔥 ОБЯЗАТЕЛЬНО
+    m_blocks.removeAll(block);
+
+    block->deleteLater();
+
+    emit blocksChanged();
+
+    qDebug() << "BLOCK DELETED";
 }

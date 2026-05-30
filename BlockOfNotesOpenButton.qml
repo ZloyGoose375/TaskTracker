@@ -11,8 +11,12 @@ Button {
 
     signal openRequested(var block)
 
-    implicitWidth: 320
-    implicitHeight: 220
+    // =========================
+    // ВАЖНО: правильная высота
+    // =========================
+    implicitHeight: contentColumn.implicitHeight + 20
+    height: visible ? implicitHeight : 0
+    opacity: visible ? 1 : 0
 
     padding: 0
 
@@ -24,12 +28,17 @@ Button {
 
     contentItem: ColumnLayout {
 
-        anchors.fill: parent
+        id: contentColumn
+
+        width: parent.width
         anchors.margins: 10
         spacing: 6
 
-        Label {
+        // =========================
+        // ЗАГОЛОВОК
+        // =========================
 
+        Label {
             text: currentNotesBlock
                   ? currentNotesBlock.blockName
                   : "Блок заметок"
@@ -40,7 +49,6 @@ Button {
             color: "black"
 
             Layout.fillWidth: true
-
             horizontalAlignment: Text.AlignHCenter
 
             elide: Text.ElideRight
@@ -53,49 +61,75 @@ Button {
             color: "#e0e0e0"
         }
 
-        Repeater {
+        // =========================
+        // СПИСОК ЗАМЕТОК
+        // =========================
 
-            model: currentNotesBlock ? currentNotesBlock.count : 0
+        Column {
 
-            delegate: Item {
+            id: notesColumn
 
-                property int index: model.index
-                property var note: currentNotesBlock.getNote(index)
+            width: parent.width
+            spacing: 2
 
-                visible: note && !note.isComplete && index < maxVisibleNotes
+            Repeater {
 
-                width: parent.width
-                height: visible ? text.implicitHeight : 0
+                model: currentNotesBlock ? currentNotesBlock.count : 0
 
-                Row {
+                delegate: Item {
+
+                    required property int index
+
+                    property var note:
+                        currentNotesBlock
+                        ? currentNotesBlock.getNote(index)
+                        : null
+
+                    visible: note && !note.isComplete && index < maxVisibleNotes
 
                     width: parent.width
-                    spacing: 5
 
-                    Rectangle {
-                        width: 7
-                        height: 7
-                        radius: 4
-                        color: "#2196F3"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
+                    // =========================
+                    // ВАЖНО: фикс высоты
+                    // =========================
+                    height: visible ? noteText.implicitHeight + 4 : 0
 
-                    Text {
-                        id: text
+                    Row {
 
-                        text: note ? note.title : ""
+                        width: parent.width
+                        spacing: 5
 
-                        width: parent.width - 20
+                        Rectangle {
+                            width: 7
+                            height: 7
+                            radius: 4
+                            color: "#2196F3"
 
-                        font.pixelSize: 14
-                        color: "#333"
-                        elide: Text.ElideRight
-                        wrapMode: Text.WordWrap
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            id: noteText
+
+                            width: parent.width - 20
+
+                            text: note ? note.title : ""
+
+                            font.pixelSize: 14
+                            color: "#333"
+
+                            wrapMode: Text.WordWrap
+                            elide: Text.ElideRight
+                        }
                     }
                 }
             }
         }
     }
+
+    // =========================
+    // CLICK
+    // =========================
 
     onClicked: {
 

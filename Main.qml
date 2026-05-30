@@ -18,44 +18,44 @@ Window {
         id: blockLoader
         anchors.fill: parent
     }
-
-    Item {
+    Flickable {
+        id: flick
         anchors.fill: parent
-        visible: blockLoader.source === ""
+        clip: true
 
-        Column {
-            anchors.fill: parent
-            spacing: 10
+        visible: blockLoader.status !== Loader.Ready
 
-            Button {
-                text: "+ Новый блок"
+        contentWidth: width
+        contentHeight: columnRoot.childrenRect.height
 
-                onClicked: {
-                    notesManager.addBlock("Новый блок")
+        Item {
+            id: columnRoot
+            width: parent.width
+
+            Column {
+                width: parent.width
+                spacing: 10
+
+                Button {
+                    text: "+ Новый блок"
+                    width: parent.width
+                    height: 45
+
+                    onClicked: notesManager.addBlock("Новый блок")
                 }
-            }
 
-            ScrollView {
-                anchors.fill: parent
-                clip: true   // 🔥 ВАЖНО
+                Repeater {
+                    model: notesManager.blocks
 
-                Column {
-                    width: parent.width   // ❗ ТОЛЬКО width
-                    spacing: 10
+                    delegate: BlockOfNotesOpenButton {
+                        width: parent.width
+                        currentNotesBlock: modelData
 
-                    Repeater {
-                        model: notesManager.blocks
-
-                        delegate: BlockOfNotesOpenButton {
-                            width: parent.width
-                            currentNotesBlock: modelData
-
-                            onOpenRequested: {
-                                blockLoader.setSource(
-                                    "BlockOfNotesWidget.qml",
-                                    { notesBlock: currentNotesBlock }
-                                )
-                            }
+                        onOpenRequested: {
+                            blockLoader.setSource(
+                                "BlockOfNotesWidget.qml",
+                                { notesBlock: currentNotesBlock }
+                            )
                         }
                     }
                 }
@@ -63,11 +63,29 @@ Window {
         }
     }
 
+
     Connections {
         target: blockLoader.item
 
         function onBackRequested() {
             blockLoader.source = ""
+        }
+        function onBlockDeleted() {
+            console.log("BLOCK DELETED → CLOSE VIEW")
+            blockLoader.source = ""
+        }
+    }
+    Connections {
+        target: blockLoader
+
+        function onSourceChanged() {
+            if (blockLoader.source === "") {
+                console.log("BACK TO MAIN")
+
+                Qt.callLater(function() {
+                    flick.contentHeight = columnRoot.childrenRect.height
+                })
+            }
         }
     }
 }

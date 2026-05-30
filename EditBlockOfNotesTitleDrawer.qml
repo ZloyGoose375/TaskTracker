@@ -4,6 +4,10 @@ import QtQuick.Layouts
 import QtQuick.Window
 Drawer{
     id: editBlockOfNotesTitleDrawer
+    property var currentNotesBlock
+    currentNotesBlock: notesBlock   // 🔥 ВАЖНО
+
+    signal blockDeleted()
     onOpened:{
         editBlockOfNotesTitleDrawerTextField.text = notesBlock.blockName
     }
@@ -16,11 +20,69 @@ Drawer{
         anchors.fill: parent
         anchors.margins: 20
         spacing: 15
-        TextField{
-            id: editBlockOfNotesTitleDrawerTextField
-            Layout.fillWidth: true
-            placeholderText: "Заголовок"
-            text: notesBlock.blockName
+        RowLayout {
+
+            width: parent.width
+            spacing: 10
+
+            // =========================
+            // КНОПКА УДАЛЕНИЯ БЛОКА
+            // =========================
+
+            Button {
+                implicitWidth: 40
+                implicitHeight: 40
+
+                background: Rectangle {
+                    color: "#E53935"
+                    radius: 6
+                }
+
+                contentItem: Text {
+                    text: "🗑"
+                    color: "white"
+                    font.pixelSize: 18
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                onClicked: {
+
+                    console.log("DELETE CLICKED")
+
+                    if (!currentNotesBlock) {
+                        console.log("NO BLOCK")
+                        return
+                    }
+
+                    console.log("DELETING:", currentNotesBlock.blockName)
+
+                    // удаляем блок
+                    notesManager.removeBlock(currentNotesBlock)
+
+                    // 🔥 сообщаем наружу
+                    blockDeleted()
+                }
+            }
+
+            // =========================
+            // ПОЛЕ ВВОДА НАЗВАНИЯ
+            // =========================
+
+            TextField {
+                id: editBlockOfNotesTitleDrawerTextField
+
+                Layout.fillWidth: true
+
+                text: currentNotesBlock ? currentNotesBlock.blockName : ""
+
+                placeholderText: "Название блока"
+
+                onTextChanged: {
+                    if (currentNotesBlock)
+                        currentNotesBlock.blockName = text
+                }
+            }
         }
 
         Button{

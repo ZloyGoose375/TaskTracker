@@ -18,6 +18,7 @@ public:
     Q_INVOKABLE QObject* getBlock(int index) const;
     Q_INVOKABLE int count() const;
     Q_INVOKABLE void addBlockObject(QObject *block);
+    Q_INVOKABLE void removeBlock(QObject *block);
 
     QList<QObject*> blocks() const;
 

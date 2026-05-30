@@ -100,11 +100,23 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                 }
                 EditBlockOfNotesTitleDrawer{
-                    id: editBlockOfNotesTitleDrawer
+                    id: editDrawer
+
+                    currentNotesBlock: notesBlock
+
+                    onBlockDeleted: {
+                        console.log("BLOCK DELETED → CLOSE BLOCK VIEW")
+
+                        // 1. закрываем drawer
+                        editDrawer.close()
+
+                        // 2. закрываем экран блока
+                        backRequested()
+                    }
                 }
 
                 onClicked: {
-                    editBlockOfNotesTitleDrawer.open()
+                    editDrawer.open()
                 }
             }
 
