@@ -22,23 +22,39 @@ Window {
             root.blockOpened = false
         }
     }
-    BlockOfNotesOpenButton {
+    ScrollView {
 
-        currentNotesBlock: notesBlock
-        visible: !root.blockOpened
+        anchors.fill: parent
 
-        onOpenRequested: {
+        Column {
 
-            root.blockOpened = true
+            width: parent.width
 
-            blockLoader.setSource("BlockOfNotesWidget.qml", {
-                notesBlock: notesBlock,
+            spacing: 20
 
-                onBackRequested: function() {
-                    root.blockOpened = false
-                    blockLoader.source = ""
+            Repeater {
+
+                model: notesBlocks
+
+                delegate: BlockOfNotesOpenButton {
+
+                    currentNotesBlock: modelData
+
+                    visible: !root.blockOpened
+
+                    onOpenRequested: {
+
+                        root.blockOpened = true
+
+                        blockLoader.setSource(
+                            "BlockOfNotesWidget.qml",
+                            {
+                                notesBlock: currentNotesBlock
+                            }
+                        )
+                    }
                 }
-            })
+            }
         }
     }
 }

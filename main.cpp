@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    QList<NotesBlock> blocks = new QList<NotesBlock()>;
+    QList<NotesBlock*> blocks;
     NotesBlock* notesBlock = new NotesBlock("АААААААААААА");
     NotesBlock* notesBlock2 = new NotesBlock("NotesBlock2");
     NotesBlock* notesBlock3 = new NotesBlock("NotesBlock3");
