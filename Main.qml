@@ -9,82 +9,64 @@ Window {
     height: 480
     visible: true
     Component.onCompleted: {
+        console.log("BLOCK COUNT =", notesManager.count())
         console.log("BLOCKS =", notesManager.blocks)
     }
     property bool blockOpened: false
-
-    // ================================
-    // ЭКРАН БЛОКА (Loader)
-    // ================================
 
     Loader {
         id: blockLoader
         anchors.fill: parent
     }
 
-    // ================================
-    // ГЛАВНЫЙ ЭКРАН (СПИСОК БЛОКОВ)
-    // ================================
-
-    Column {
-
+    Item {
         anchors.fill: parent
-        spacing: 10
+        visible: blockLoader.source === ""
 
-        // =========================
-        // КНОПКА ДОБАВЛЕНИЯ
-        // =========================
+        Column {
+            anchors.fill: parent
+            spacing: 10
 
-        Button {
-            text: "+ Новый блок"
+            Button {
+                text: "+ Новый блок"
 
-            width: parent.width
-            height: 45
-
-            onClicked: {
-                notesManager.addBlock("Новый блок")
+                onClicked: {
+                    notesManager.addBlock("Новый блок")
+                }
             }
-        }
 
-        // =========================
-        // СПИСОК БЛОКОВ
-        // =========================
+            ScrollView {
+                anchors.fill: parent
+                clip: true   // 🔥 ВАЖНО
 
-        Repeater {
+                Column {
+                    width: parent.width   // ❗ ТОЛЬКО width
+                    spacing: 10
 
-            model: notesManager.blocks   // ВАЖНО!
+                    Repeater {
+                        model: notesManager.blocks
 
-            delegate: BlockOfNotesOpenButton {
+                        delegate: BlockOfNotesOpenButton {
+                            width: parent.width
+                            currentNotesBlock: modelData
 
-                width: parent.width
-
-                currentNotesBlock: modelData
-
-                onOpenRequested: {
-
-                    root.blockOpened = true
-
-                    blockLoader.setSource(
-                        "BlockOfNotesWidget.qml",
-                        {
-                            notesBlock: currentNotesBlock
+                            onOpenRequested: {
+                                blockLoader.setSource(
+                                    "BlockOfNotesWidget.qml",
+                                    { notesBlock: currentNotesBlock }
+                                )
+                            }
                         }
-                    )
+                    }
                 }
             }
         }
     }
 
-    // ================================
-    // ОБРАБОТКА BACK ИЗ БЛОКА
-    // ================================
-
     Connections {
         target: blockLoader.item
 
         function onBackRequested() {
-
-            root.blockOpened = false
             blockLoader.source = ""
         }
     }
