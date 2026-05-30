@@ -14,7 +14,14 @@ Window {
         id: blockLoader
         anchors.fill: parent
     }
+    Connections {
+        target: blockLoader.item
 
+        function onBackRequested() {
+            blockLoader.source = ""
+            root.blockOpened = false
+        }
+    }
     BlockOfNotesOpenButton {
 
         currentNotesBlock: notesBlock
