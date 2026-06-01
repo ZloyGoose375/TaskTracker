@@ -228,4 +228,5 @@ void NotesBlock::sortNotes(){
 
     emit notesChanged();
     emit countChanged();
+    emit notesChangedExternally();
 }

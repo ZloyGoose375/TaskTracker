@@ -80,6 +80,7 @@ signals:
 
     void blockNameChanged();
     void notesChanged();
+    void notesChangedExternally();
 
 private:
 

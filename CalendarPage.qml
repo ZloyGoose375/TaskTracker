@@ -4,7 +4,6 @@ import QtQuick.Layouts
 
 Item {
     id: root
-
     property date currentMonth: new Date()
     property date selectedDate: new Date()
     property bool tasksOpened: false
@@ -24,7 +23,6 @@ Item {
         // =========================
         // HEADER (фиксированный)
         // =========================
-
         Rectangle {
             Layout.fillWidth: true
             height: 60

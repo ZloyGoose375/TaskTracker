@@ -11,8 +11,13 @@ void NotesManager::addBlock(const QString &name)
     auto *block = new NotesBlock(name, this);
 
     m_blocks.append(block);
+    connect(block, &NotesBlock::notesChangedExternally,
+            this, &NotesManager::tasksChanged);
 
+    connect(block, &NotesBlock::countChanged,
+            this, &NotesManager::tasksChanged);
     emit blocksChanged();
+    emit tasksChanged();   // 🔥 ДОБАВИТЬ
 }
 
 QObject* NotesManager::getBlock(int index) const
@@ -52,6 +57,7 @@ void NotesManager::removeBlock(QObject *block)
     block->deleteLater();
 
     emit blocksChanged();
+    emit tasksChanged();   // 🔥 ДОБАВИТЬ
 
     qDebug() << "BLOCK DELETED";
 }
