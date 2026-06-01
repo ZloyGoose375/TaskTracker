@@ -11,6 +11,13 @@ void NotesManager::addBlock(const QString &name)
     auto *block = new NotesBlock(name, this);
 
     m_blocks.append(block);
+
+    connect(block, &NotesBlock::notesChangedExternally,
+            this, &NotesManager::tasksChanged);
+
+    connect(block, &NotesBlock::countChanged,
+            this, &NotesManager::tasksChanged);
+
     connect(block, &NotesBlock::notesChangedExternally,
             this, &NotesManager::tasksChanged);
 

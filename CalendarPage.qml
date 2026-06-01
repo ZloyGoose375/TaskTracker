@@ -15,6 +15,13 @@ Item {
             root.forceLayout()
         }
     }
+    Connections {
+        target: notesManager
+
+        function onTasksChanged() {
+            calendarRefresh++
+        }
+    }
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 12

@@ -225,7 +225,6 @@ void NotesBlock::sortNotes(){
                   return a->dateTimeToCompletion()
                          < b->dateTimeToCompletion();
               });
-
     emit notesChanged();
     emit countChanged();
     emit notesChangedExternally();
