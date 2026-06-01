@@ -138,6 +138,9 @@ Item {
             columns: 7
             Layout.fillWidth: true
 
+            columnSpacing: 0
+            rowSpacing: 5
+
             property int daysInMonth: {
                 let d = new Date(
                     currentMonth.getFullYear(),
@@ -151,20 +154,15 @@ Item {
                 model: 42
 
                 delegate: Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 45
 
                     property int day: index + 1
                     visible: day <= parent.daysInMonth
 
-                    width: 40
-                    height: 45
-
-                    // =========================
-                    // ДЕНЬ (центрированный)
-                    // =========================
-
                     Rectangle {
                         anchors.centerIn: parent
-                        width: 36
+                        width: Math.min(parent.width, 42)
                         height: 36
                         radius: 8
 
@@ -178,18 +176,11 @@ Item {
 
                         border.color: "#ddd"
 
-                        Label {
+                        Text {
                             anchors.centerIn: parent
                             text: parent.parent.day
-
-                            color: parent.color === "#4CAF50"
-                                   ? "white"
-                                   : "black"
+                            color: parent.color === "#4CAF50" ? "white" : "black"
                         }
-
-                        // =========================
-                        // ТОЧКА (есть задачи)
-                        // =========================
 
                         Rectangle {
                             width: 6
@@ -219,7 +210,6 @@ Item {
                                     currentMonth.getMonth(),
                                     parent.parent.day
                                 )
-
                                 tasksOpened = true
                             }
                         }
@@ -302,95 +292,3 @@ Item {
     }
 
 }
-
-
-
-
-
-
-//import QtQuick
-//import QtQuick.Controls
-//import QtQuick.Layouts
-//
-//Item {
-//
-//    anchors.fill: parent
-//
-//    property int daysInMonth: 30
-//    property int selectedDay: -1
-//
-//    ColumnLayout {
-//
-//        anchors.fill: parent
-//        anchors.margins: 20
-//
-//        spacing: 10
-//
-//        Label {
-//            text: "Июнь 2026"
-//
-//            font.pixelSize: 24
-//            font.bold: true
-//        }
-//
-//        GridLayout {
-//
-//            columns: 7
-//
-//            rowSpacing: 5
-//            columnSpacing: 5
-//
-//            Repeater {
-//
-//                model: daysInMonth
-//
-//                delegate: Rectangle {
-//
-//                    required property int index
-//
-//                    width: 60
-//                    height: 60
-//
-//                    radius: 8
-//
-//                    color: notesManager.hasTasksOnDate(
-//                               new Date(2026, 5, index + 1)
-//                           )
-//                           ? "#81C784"
-//                           : "#f0f0f0"
-//
-//                    border.color: "#cccccc"
-//
-//                    Label {
-//
-//                        anchors.centerIn: parent
-//
-//                        text: index + 1
-//                    }
-//
-//                    MouseArea {
-//
-//
-//                        anchors.fill: parent
-//
-//                        onClicked: {
-//
-//                            selectedDay = index + 1
-//
-//                            console.log("Выбран день:", selectedDay)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        Label {
-//
-//            visible: selectedDay > 0
-//
-//            text: "Выбран день: " + selectedDay
-//
-//            font.pixelSize: 18
-//            font.bold: true
-//        }
-//    }
-//}

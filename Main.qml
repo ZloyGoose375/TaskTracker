@@ -63,8 +63,15 @@ Window {
                 Button {
                     width: parent.width
                     text: "📅 Календарь"
+
                     onClicked: {
                         currentPage = "calendar"
+
+                        // 🔥 пересоздаём календарь
+                        calendarLoader.source = ""
+                        Qt.callLater(() => {
+                            calendarLoader.source = "CalendarPage.qml"
+                        })
                     }
                 }
 
@@ -87,9 +94,9 @@ Window {
             // КАЛЕНДАРЬ
             // =========================
 
-            CalendarPage {
+            Loader {
+                id: calendarLoader
                 anchors.fill: parent
-
                 visible: currentPage === "calendar"
             }
 
