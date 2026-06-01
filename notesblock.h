@@ -72,6 +72,7 @@ public:
     Q_INVOKABLE void removeNote(int index);
 
     Q_INVOKABLE Note* getNote(int index) const;
+    Q_INVOKABLE void sortNotes();
 
 signals:
 
@@ -85,6 +86,7 @@ private:
     QString m_blockName;
 
     QList<Note*> m_notes;
+
 };
 
 #endif // NOTESBLOCK_H

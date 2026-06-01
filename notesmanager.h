@@ -19,10 +19,13 @@ public:
     Q_INVOKABLE int count() const;
     Q_INVOKABLE void addBlockObject(QObject *block);
     Q_INVOKABLE void removeBlock(QObject *block);
+    Q_INVOKABLE bool hasTasksOnDate(QDate date);
+    Q_INVOKABLE QVariantList tasksForDate(const QDate &date);
 
     QList<QObject*> blocks() const;
 
 signals:
+    void tasksChanged();
     void blocksChanged();
 
 private:

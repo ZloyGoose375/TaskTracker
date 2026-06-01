@@ -40,6 +40,7 @@ qt_add_qml_module(appTaskTracker
         QML_FILES EditBlockOfNotesTitleDrawer.qml
         QML_FILES BlockOfNotesOpenButton.qml
         SOURCES notesmanager.h notesmanager.cpp
+        QML_FILES CalendarPage.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

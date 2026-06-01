@@ -138,9 +138,13 @@ void NotesBlock::addNote(Note* note)
         return;
 
     m_notes.append(note);
-
-    emit notesChanged();
-    emit countChanged();
+    sortNotes();
+    connect(note,
+            &Note::completeChanged,
+            this,
+            &NotesBlock::sortNotes);
+    //emit notesChanged();
+    //emit countChanged();
 }
 
 void NotesBlock::addNote(const QString& title,
@@ -161,9 +165,13 @@ void NotesBlock::addNote(const QString& title,
                  this);
 
     m_notes.append(note);
-
-    emit notesChanged();
-    emit countChanged();
+    sortNotes();
+    connect(note,
+            &Note::completeChanged,
+            this,
+            &NotesBlock::sortNotes);
+    //emit notesChanged();
+    //emit countChanged();
 }
 
 void NotesBlock::removeNote(int index)
@@ -194,4 +202,30 @@ Note* NotesBlock::getNote(int index) const
 
     return m_notes[index];
 }
+void NotesBlock::sortNotes(){
+    std::sort(m_notes.begin(),
+              m_notes.end(),
+              [](Note* a, Note* b)
+              {
+                  // 1. Выполненные всегда в конце
+                  if (a->isComplete() != b->isComplete())
+                      return !a->isComplete();
 
+                  bool aFake =
+                      a->dateTimeToCompletion().date().year() == 1000;
+
+                  bool bFake =
+                      b->dateTimeToCompletion().date().year() == 1000;
+
+                  // 2. Заметки без даты идут после заметок с датой
+                  if (aFake != bFake)
+                      return !aFake;
+
+                  // 3. Сортировка по дате
+                  return a->dateTimeToCompletion()
+                         < b->dateTimeToCompletion();
+              });
+
+    emit notesChanged();
+    emit countChanged();
+}

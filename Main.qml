@@ -13,46 +13,152 @@ Window {
         console.log("BLOCKS =", notesManager.blocks)
     }
     property bool blockOpened: false
+    property string currentPage: "tasks"
 
-    Loader {
-        id: blockLoader
+    RowLayout {
         anchors.fill: parent
-    }
-    Flickable {
-        id: flick
-        anchors.fill: parent
-        clip: true
+        spacing: 0
 
-        visible: !blockLoader.item
+        // =========================
+        // БОКОВАЯ ПАНЕЛЬ
+        // =========================
 
-        contentWidth: width
-        contentHeight: columnRoot.implicitHeight
+        Rectangle {
+            Layout.preferredWidth: 120
+            Layout.fillHeight: true
 
-        Column {
-            id: columnRoot
-            width: parent.width
-            spacing: 10
+            color: "#2b2b2b"
 
-            Button {
-                text: "+ Новый блок"
-                width: parent.width
-                height: 45
+            Column {
+                anchors.fill: parent
+                anchors.margins: 10
 
-                onClicked: notesManager.addBlock("Новый блок")
+                spacing: 10
+
+                Label {
+                    width: parent.width
+
+                    text: "TaskTracker"
+
+                    color: "white"
+                    font.pixelSize: 20
+                    font.bold: true
+
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: 1
+                    color: "#555555"
+                }
+
+                Button {
+                    width: parent.width
+                    text: "📝 Задачи"
+                    onClicked: {
+                        currentPage = "tasks"
+                    }
+                }
+                Button {
+                    width: parent.width
+                    text: "📅 Календарь"
+                    onClicked: {
+                        currentPage = "calendar"
+                    }
+                }
+
+                Button {
+                    width: parent.width
+                    text: "📊 Статистика"
+                }
+            }
+        }
+
+        // =========================
+        // ОСНОВНАЯ ОБЛАСТЬ
+        // =========================
+
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            // =========================
+            // КАЛЕНДАРЬ
+            // =========================
+
+            CalendarPage {
+                anchors.fill: parent
+
+                visible: currentPage === "calendar"
             }
 
-            Repeater {
-                model: notesManager.blocks
+            // =========================
+            // ОТКРЫТЫЙ БЛОК
+            // =========================
 
-                delegate: BlockOfNotesOpenButton {
-                    width: parent.width
-                    currentNotesBlock: modelData
+            Loader {
+                id: blockLoader
 
-                    onOpenRequested: {
-                        blockLoader.setSource(
-                            "BlockOfNotesWidget.qml",
-                            { notesBlock: currentNotesBlock }
-                        )
+                anchors.fill: parent
+
+                visible: currentPage === "tasks"
+            }
+
+            // =========================
+            // СПИСОК БЛОКОВ
+            // =========================
+
+            Flickable {
+                id: flick
+
+                anchors.fill: parent
+
+                clip: true
+
+                visible: currentPage === "tasks"
+                         && !blockLoader.item
+
+                contentWidth: width
+                contentHeight: columnRoot.implicitHeight
+
+                Column {
+                    id: columnRoot
+
+                    width: flick.width
+
+                    spacing: 10
+
+                    Button {
+                        text: "+ Новый блок"
+
+                        width: parent.width
+                        height: 45
+
+                        onClicked: {
+                            notesManager.addBlock("Новый блок")
+                        }
+                    }
+
+                    Repeater {
+                        model: notesManager.blocks
+
+                        delegate: BlockOfNotesOpenButton {
+
+                            width: parent.width
+
+                            currentNotesBlock: modelData
+
+                            onOpenRequested: {
+
+                                blockLoader.setSource(
+                                    "BlockOfNotesWidget.qml",
+                                    {
+                                        notesBlock: currentNotesBlock
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }

@@ -127,6 +127,8 @@ Popup {
                         selectedMinute
                     )
                     customNote.dateTimeToCompletion = newDateTime
+                    if (notesBlock)
+                        notesBlock.sortNotes()
                     timePickerPopup.close()
                 }
             }

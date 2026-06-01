@@ -55,3 +55,54 @@ void NotesManager::removeBlock(QObject *block)
 
     qDebug() << "BLOCK DELETED";
 }
+bool NotesManager::hasTasksOnDate(QDate date)
+{
+    for (QObject* object : m_blocks)
+    {
+        NotesBlock* block =
+            qobject_cast<NotesBlock*>(object);
+
+        if (!block)
+            continue;
+
+        for (int i = 0; i < block->count(); i++)
+        {
+            Note* note = block->getNote(i);
+
+            if (!note)
+                continue;
+
+            if (note->dateTimeToCompletion().date() == date)
+                return true;
+        }
+    }
+
+    return false;
+}
+QVariantList NotesManager::tasksForDate(const QDate &date)
+{
+    QVariantList result;
+
+    for (QObject* obj : m_blocks)
+    {
+        NotesBlock* block = qobject_cast<NotesBlock*>(obj);
+        if (!block)
+            continue;
+
+        for (int i = 0; i < block->count(); ++i)
+        {
+            Note* note = block->getNote(i);
+            if (!note)
+                continue;
+
+            QDate noteDate = note->dateTimeToCompletion().date();
+
+            if (noteDate == date && !note->isComplete())
+            {
+                result.append(QVariant::fromValue(note));
+            }
+        }
+    }
+
+    return result;
+}

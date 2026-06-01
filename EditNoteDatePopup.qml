@@ -165,6 +165,8 @@ Popup {
             onClicked:{
                 var newDateTime = new Date(1000, 0, 1, 0, 0)
                 customNote.dateTimeToCompletion = newDateTime
+                if (notesBlock)
+                    notesBlock.sortNotes()
                 datePickerPopup.close()
             }
         }
