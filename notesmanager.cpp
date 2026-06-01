@@ -119,3 +119,28 @@ QVariantList NotesManager::tasksForDate(const QDate &date)
 
     return result;
 }
+QVariantList NotesManager::allUncompletedTasks()
+{
+    QVariantList result;
+
+    for (QObject* obj : m_blocks)
+    {
+        NotesBlock* block = qobject_cast<NotesBlock*>(obj);
+        if (!block)
+            continue;
+
+        for (int i = 0; i < block->count(); ++i)
+        {
+            Note* note = block->getNote(i);
+            if (!note)
+                continue;
+
+            if (!note->isComplete())
+            {
+                result.append(QVariant::fromValue(note));
+            }
+        }
+    }
+
+    return result;
+}

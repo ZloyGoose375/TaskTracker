@@ -21,6 +21,7 @@ public:
     Q_INVOKABLE void removeBlock(QObject *block);
     Q_INVOKABLE bool hasTasksOnDate(QDate date);
     Q_INVOKABLE QVariantList tasksForDate(const QDate &date);
+    Q_INVOKABLE QVariantList allUncompletedTasks();
 
     QList<QObject*> blocks() const;
 

@@ -78,6 +78,9 @@ Window {
                 Button {
                     width: parent.width
                     text: "📊 Статистика"
+                    //onClicked: {
+                    //    pageLoader.source = "StatisticPage.qml"
+                    //}
                 }
             }
         }
@@ -116,6 +119,19 @@ Window {
             // СПИСОК БЛОКОВ
             // =========================
 
+            // Loader {
+            //     id: pageLoader
+            //     Layout.fillWidth: true
+            //     Layout.fillHeight: true
+
+            //     source: {
+            //         if (currentPage === "calendar")
+            //             return "CalendarPage.qml"
+            //         if (currentPage === "stats")
+            //             return "StatisticPage.qml"
+            //         return "TasksPage.qml"
+            //     }
+            // }
             Flickable {
                 id: flick
 
