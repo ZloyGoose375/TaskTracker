@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         "a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a ",
         testDateTime,
         testPlace,
-        false
+        true
     );
     Note *testNote2 = new Note(
         "Проверка текста 1",

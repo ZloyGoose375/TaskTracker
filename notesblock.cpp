@@ -143,6 +143,13 @@ void NotesBlock::addNote(Note* note)
             &Note::completeChanged,
             this,
             &NotesBlock::sortNotes);
+    connect(note,
+            &Note::completeChanged,
+            this,
+            [this]()
+            {
+                emit notesChangedExternally();
+            });
     //emit notesChanged();
     //emit countChanged();
 }

@@ -23,6 +23,11 @@ void NotesManager::addBlock(const QString &name)
 
     connect(block, &NotesBlock::countChanged,
             this, &NotesManager::tasksChanged);
+
+    connect(block,
+            &NotesBlock::notesChangedExternally,
+            this,
+            &NotesManager::tasksChanged);
     emit blocksChanged();
     emit tasksChanged();   // 🔥 ДОБАВИТЬ
 }

@@ -74,13 +74,13 @@ Window {
                         })
                     }
                 }
-
                 Button {
-                    width: parent.width
                     text: "📊 Статистика"
-                    //onClicked: {
-                    //    pageLoader.source = "StatisticPage.qml"
-                    //}
+                    width: parent.width
+
+                    onClicked: {
+                        currentPage = "stats"
+                    }
                 }
             }
         }
@@ -92,32 +92,46 @@ Window {
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
-
-            // =========================
-            // КАЛЕНДАРЬ
-            // =========================
-
-            Loader {
-                id: calendarLoader
+            CalendarPage {
                 anchors.fill: parent
                 visible: currentPage === "calendar"
             }
 
-            // =========================
-            // ОТКРЫТЫЙ БЛОК
-            // =========================
+            StatisticPage {
+                anchors.fill: parent
+                visible: currentPage === "stats"
+            }
 
             Loader {
                 id: blockLoader
-
                 anchors.fill: parent
-
                 visible: currentPage === "tasks"
             }
+            // // =========================
+            // // КАЛЕНДАРЬ
+            // // =========================
 
-            // =========================
-            // СПИСОК БЛОКОВ
-            // =========================
+            // Loader {
+            //     id: calendarLoader
+            //     anchors.fill: parent
+            //     visible: currentPage === "calendar"
+            // }
+
+            // // =========================
+            // // ОТКРЫТЫЙ БЛОК
+            // // =========================
+
+            // Loader {
+            //     id: blockLoader
+
+            //     anchors.fill: parent
+
+            //     visible: currentPage === "tasks"
+            // }
+
+            // // =========================
+            // // СПИСОК БЛОКОВ
+            // // =========================
 
             // Loader {
             //     id: pageLoader
@@ -132,6 +146,7 @@ Window {
             //         return "TasksPage.qml"
             //     }
             // }
+
             Flickable {
                 id: flick
 

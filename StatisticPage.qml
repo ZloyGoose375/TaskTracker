@@ -4,6 +4,15 @@ import QtQuick.Layouts
 
 Item {
     id: root
+    property int refreshCounter: 0
+
+    Connections {
+        target: notesManager
+
+        function onTasksChanged() {
+            refreshCounter++
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -41,10 +50,16 @@ Item {
                 spacing: 10
 
                 Repeater {
-                    model: notesManager.allUncompletedTasks()
+                    id: tasksRepeater
+
+                    model: {
+                        refreshCounter
+                        return notesManager.allUncompletedTasks()
+                    }
 
                     delegate: NoteWidget {
-                        width: parent.width * 0.95
+                        width: column.width * 0.95
+
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         customNote: modelData
